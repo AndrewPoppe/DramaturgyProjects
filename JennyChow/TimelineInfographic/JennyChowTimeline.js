@@ -1,9 +1,6 @@
 
 
-// word wrap
-const wrap = (s, w) => s.replace(
-    new RegExp(`(?![^\\n]{1,${w}}$)([^\\n]{1,${w}})\\s`, 'g'), '$1\n'
-);
+
 
 // Function for creating a point on the timeline
 // 
@@ -13,7 +10,7 @@ function createPoint(x, y, r, fill, stroke, text, textPos="up", container) {
 	// SVG group to hold text box and things
 	const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
 	const groupID = Math.random().toString(36).substring(2);
-	group.setAttribute('id', groupID);
+	group.setAttribute('class', groupID);
 	group.setAttribute('opacity', 0);
 	circ.setAttribute('textID', groupID);
 
@@ -63,26 +60,32 @@ function createPoint(x, y, r, fill, stroke, text, textPos="up", container) {
 		endY = boxLoc.y + boxLoc.height/2;
 	const connectLine = makeLine(startX, endX, startY, endY, fill, 6);
 	const connectBackground = makeLine(startX, endX, startY, endY, stroke, 14);
+	connectBackground.setAttribute("class", groupID);
+	connectBackground.setAttribute("opacity", 0);
 	
 	// Add elements to group in the order I want them shown
 	// Elements that were already present will not be duplicated, 
 	// but will be re-ordered
-	group.appendChild(connectBackground);
+	container.appendChild(connectBackground);
 	group.appendChild(box);
 	group.appendChild(connectLine);
 	group.appendChild(txt);
+	container.appendChild(circ);
+	container.appendChild(group);
 
 	// Handle mouseover
 	circ.onmouseenter = function() {
 		const gID = this.getAttribute("textID");
-		document.getElementById(gID).setAttribute("opacity", 100);
+		const ets = document.getElementsByClassName(gID);
+		for (et of ets) et.setAttribute("opacity", 100);
 		const r = this.getAttribute("r");
 		this.setAttribute("r", r*2)
 		this.setAttribute("stroke-width", 4);
 	}
 	circ.onmouseleave = function() {
 		const gID = this.getAttribute("textID");
-		document.getElementById(gID).setAttribute("opacity", 0);
+		const ets = document.getElementsByClassName(gID);
+		for (et of ets) et.setAttribute("opacity", 0);
 		const r = this.getAttribute("r");
 		this.setAttribute("r", r/2)
 		this.setAttribute("stroke-width", 1);
@@ -103,13 +106,17 @@ function makeCircle(x, y, r, color, stroke) {
 }
 
 // make a text element
-function makeText(x, y, text, anchor="middle", wrap = 40) {
+function makeText(x, y, text, anchor="middle", wrap=40) {
+	// word wrap
+	const Wrap = (s, w) => s.replace(
+		new RegExp(`(?![^\\n]{1,${w}}$)([^\\n]{1,${w}})\\s`, 'g'), '$1\n'
+	);
 	const T = document.createElementNS("http://www.w3.org/2000/svg", "text");
 	T.setAttribute("x", x);
 	T.setAttribute("y", y);
 	T.setAttribute("text-anchor", anchor);
 
-	const lines = wrap(text, wrap).split('\n');
+	const lines = Wrap(text, wrap).split('\n');
 	
 	lines.forEach(line => {
 		let thisLine = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
