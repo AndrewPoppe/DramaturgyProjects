@@ -1,14 +1,18 @@
 // Class for TimeLine
 class TimeLine {
-	constructor(x, y, width, height, bgColor, lineColor, id, container) {
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
-		this.bgColor = bgColor;
-		this.lineColor = lineColor;
-		this.lineThickness = 3;
-		this.container = container;
+	constructor(options) {
+		const defaults = {
+			x: "5%",
+			y: "0px",
+			width: "90%",
+			height: "20%",
+			bgColor: "white",
+			lineColor: "black",
+			container: document.body,
+			lineY: "50%",
+			lineThickness: 3
+		};
+		this.opts = {...defaults, ...options};
 		this.ns = "http://www.w3.org/2000/svg";
 		this.draw();
 	}
@@ -21,21 +25,20 @@ class TimeLine {
 	// Create the div
 	createDIV() {
 		const D = document.createElement('div');
-		D.style.left = this.x;
-		D.style.top = this.y;
-		D.style.height = this.height;
-		D.style.width = this.width;
+		D.style.left = this.opts.x;
+		D.style.top = this.opts.y;
+		D.style.height = this.opts.height;
+		D.style.width = this.opts.width;
 		D.style.position = "fixed";
-		D.style.backgroundColor = this.bgColor;
+		D.style.backgroundColor = this.opts.bgColor;
 		this.div = D;
 	}
 
 	// Create the SVG
 	createSVG() {
 		const S = this.createElement("svg");
-		S.setAttribute("height", this.height);
+		S.setAttribute("height", "100%");
 		S.setAttribute("width", "100%");
-		//S.setAttribute("")
 		this.svg = S;
 	}
 
@@ -44,10 +47,10 @@ class TimeLine {
 		const M = this.createElement("line");
 		M.setAttribute("x1", "0%");
 		M.setAttribute("x2", "100%");
-		M.setAttribute("y1", "50%");
-		M.setAttribute("y2", "50%");
-		M.setAttribute("stroke", this.lineColor);
-		M.setAttribute("stroke-width", this.lineThickness);
+		M.setAttribute("y1", this.opts.lineY);
+		M.setAttribute("y2", this.opts.lineY);
+		M.setAttribute("stroke", this.opts.lineColor);
+		M.setAttribute("stroke-width", this.opts.lineThickness);
 		this.MainLine = M;
 		this.svg.appendChild(this.MainLine);
 	}
@@ -58,7 +61,7 @@ class TimeLine {
 		this.createSVG();
 		this.createMainLine();
 		this.div.appendChild(this.svg);
-		this.container.appendChild(this.div);
+		this.opts.container.appendChild(this.div);
 	}
 
 }
