@@ -1,5 +1,11 @@
 
 
+// Sheets are defined in data.js
+const Year0 = 1920,
+	Year1 = 2017,
+	range = Year1 - Year0;
+
+
 
 // create a TimeLine
 const TL1 = new TimeLine({
@@ -11,7 +17,8 @@ const TL1 = new TimeLine({
 	lineColor: "red",
 	container: document.body,
 	lineY: "90%",
-	lineThickness: 3
+	lineThickness: 3,
+	years: [Year0, Year1]
 });
 
 // Second TL
@@ -25,6 +32,8 @@ const TL2 = new TimeLine({
 	container: document.body,
 	lineY: "80%",
 	lineThickness: 3,
+	years: [Year0, Year1],
+	drawYear: false,
 	svg: TL1.svg
 });
 
@@ -39,14 +48,10 @@ const TL3 = new TimeLine({
 	container: document.body,
 	lineY: "70%",
 	lineThickness: 8,
+	years: [Year0, Year1],
+	drawYear: false,
 	svg: TL1.svg
 });
-
-
-// Sheets are defined in data.js
-const Year0 = 1920,
-	Year1 = 2017,
-	range = Year1 - Year0;
 
 
 

@@ -25,9 +25,14 @@ class TimePoint {
 		this.construct();
 	}
 
-	// draw an element onto the TimeLine container's SVG
-	drawElement(elt) {
-		this.opts.TimeLine.svg.appendChild(elt);
+	// adds an element into this point's group
+	addElement(elt) {
+		this.group.appendChild(elt);
+	}
+
+	// adds group onto the TimeLine container's SVG
+	drawGroup() {
+		this.opts.TimeLine.svg.appendChild(this.group);
 	}
 
 	// make a circle element
@@ -52,6 +57,7 @@ class TimePoint {
 			// increase circle radius and stroke width
 			this.setAttribute("r", this.Point.opts.r * 2);
 			this.setAttribute("stroke-width", this.Point.opts.strokeWidth * 4);
+			this.Point.drawGroup();
 		}
 		C.onmouseleave = function() {
 			// Hide text/content box and lines
@@ -63,6 +69,13 @@ class TimePoint {
 		}
 
 		return C;
+	}
+
+	// make a group to hold all this point's elements
+	makeGroup() {
+		const g = document.createElementNS(this.ns, "g");
+		this.group = g;
+		return g;
 	}
 
 	// make a box element for text
@@ -147,12 +160,16 @@ class TimePoint {
 
 	// Build the thing
 	construct() {
-		const circ = this.makeCircle(),
+		const group = this.makeGroup(),
+			circ = this.makeCircle(),
 			textGap = 100;
+
+		this.drawGroup();
+		this.addElement(circ);
 
 		if (typeof this.opts.content === "string") { 
 			const txt = this.makeText();
-			this.drawElement(txt);
+			this.addElement(txt);
 			let txtLoc = txt.getBBox();
 			const lineLoc = this.opts.TimeLine.MainLine.getBBox();
 
@@ -178,8 +195,8 @@ class TimePoint {
 			const box = this.makeTextBox(txtLoc);
 			
 			// Get bounds of box and circle and make connecting lines
-			this.drawElement(box);
-			this.drawElement(circ);
+			this.addElement(box);
+			this.addElement(circ);
 			const circLoc = circ.getBBox(),
 				boxLoc = box.getBBox(),
 				X1 = circLoc.x + circLoc.width/2,
@@ -196,11 +213,11 @@ class TimePoint {
 			// Add elements to group in the order I want them shown
 			// Elements that were already present will not be duplicated, 
 			// but will be re-ordered
-			this.drawElement(connectBackground);
-			this.drawElement(circ);
-			this.drawElement(box);
-			this.drawElement(connectLine);
-			this.drawElement(txt);
+			this.addElement(connectBackground);
+			this.addElement(circ);
+			this.addElement(box);
+			this.addElement(connectLine);
+			this.addElement(txt);
 	
 
 
