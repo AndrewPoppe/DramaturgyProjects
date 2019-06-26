@@ -13,6 +13,11 @@ class TimeLine {
 			lineThickness: 3
 		};
 		this.opts = {...defaults, ...options};
+		if (this.opts.svg) {
+			this.svg = this.opts.svg;
+			this.div = this.svg.parentElement;
+		}
+		this.svg = this.opts.svg;
 		this.ns = "http://www.w3.org/2000/svg";
 		this.draw();
 	}
@@ -57,10 +62,12 @@ class TimeLine {
 
 	// Create the thing
 	draw() {
-		this.createDIV();
-		this.createSVG();
+		if (!this.svg) {
+			this.createDIV();
+			this.createSVG();
+			this.div.appendChild(this.svg);
+		}
 		this.createMainLine();
-		this.div.appendChild(this.svg);
 		this.opts.container.appendChild(this.div);
 	}
 

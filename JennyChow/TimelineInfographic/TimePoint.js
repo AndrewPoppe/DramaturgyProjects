@@ -14,6 +14,7 @@ class TimePoint {
 			textPos: "up",
 			anchor: "middle",
 			wrap: 40,
+			year: 1900
 		};
 		this.opts = {...defaults, ...options};
 		if (!this.opts.TimeLine) throw("TimePoint options must include TimeLine.");
@@ -42,16 +43,19 @@ class TimePoint {
 
 		// Handle mouseover
 		C.onmouseenter = function() {
+			// re-add circle to svg to force it to the front
+			//this.Point.drawElement(this);
+
 			// Show text/content box and lines
-			this.Point.elements.forEach(elt => elt.setAttribute("opacity", 100));
+			this.Point.elements.forEach(elt => {elt.style.display = "block"});
 
 			// increase circle radius and stroke width
-			this.setAttribute("r", this.Point.opts.r * 2)
+			this.setAttribute("r", this.Point.opts.r * 2);
 			this.setAttribute("stroke-width", this.Point.opts.strokeWidth * 4);
 		}
 		C.onmouseleave = function() {
 			// Hide text/content box and lines
-			this.Point.elements.forEach(elt => elt.setAttribute("opacity", 0));
+			this.Point.elements.forEach(elt => {elt.style.display = "none"});
 
 			// return circle radius and stroke width to normal
 			this.setAttribute("r", this.Point.opts.r)
@@ -72,7 +76,6 @@ class TimePoint {
 		B.setAttribute("stroke", this.opts.stroke);
 		B.setAttribute("stroke-width", "6");
 		B.setAttribute("rx", "10");
-		B.setAttribute("opacity", 0);
 		this.elements.push(B);
 		return B;
 	}
@@ -94,21 +97,31 @@ class TimePoint {
 
 		const lineY = this.opts.TimeLine.MainLine.getBBox().y;
 
-		T.setAttribute("y", this.opts.textPos === "up" ? lineY - 10 : lineY + 10);
+		T.setAttribute("y", this.opts.textPos === "up" ? lineY - 50 : lineY + 50);
 		T.setAttribute("text-anchor", this.opts.anchor);
+		T.style.font = "italic 18px sans-serif";
 
+		const yearText = document.createElementNS(this.ns, "tspan");
+		yearText.setAttribute("dy", "1.2em");
+		yearText.setAttribute("x", this.opts.x);
+		yearText.setAttribute("text-anchor", this.opts.anchor);
+		yearText.textContent = `${this.opts.year}`;
+		yearText.style.fill = "red";
+		yearText.style.font = "bold 24px Helvetica";
+		T.appendChild(yearText);
+		
 		const lines = Wrap(this.opts.content, this.opts.wrap).split('\n');
 		
-		lines.forEach(line => {
+		let lastNewline = false;
+		lines.forEach((line, i) => {
 			let thisLine = document.createElementNS(this.ns, "tspan");
-			thisLine.setAttribute("dy", "1.2em");
+			thisLine.setAttribute("dy", i == 0 || lastNewline ? "2.4em" : "1.2em");
 			thisLine.setAttribute("x", this.opts.x);
 			thisLine.setAttribute("text-anchor", this.opts.anchor);
 			thisLine.textContent = line;
 			T.appendChild(thisLine);
+			lastNewline = line ==="";
 		});
-		T.setAttribute('opacity', 0);
-		T.style.font = "italic 12px sans-serif;";
 		this.elements.push(T);
 		return T;
 	}
@@ -127,27 +140,42 @@ class TimePoint {
 		L.setAttribute("y2", y2);
 		L.setAttribute("stroke-width", strokeWidth);
 		L.setAttribute("stroke", color);
-		L.setAttribute('opacity', 0);
+		L.style.display = "none";
 		this.elements.push(L);
 		return L;
 	}
 
 	// Build the thing
 	construct() {
-		const circ = this.makeCircle();
+		const circ = this.makeCircle(),
+			textGap = 100;
 
 		if (typeof this.opts.content === "string") { 
 			const txt = this.makeText();
 			this.drawElement(txt);
-			const txtLoc = txt.getBBox(),
-				lineLoc = this.opts.TimeLine.MainLine.getBBox;
+			let txtLoc = txt.getBBox();
+			const lineLoc = this.opts.TimeLine.MainLine.getBBox();
+
+			// Deal with txt box location. This should really happen within 
+			// the makeText() method...
+			const xDiff = (lineLoc.x + lineLoc.width) - (txtLoc.x + txtLoc.width) - 12;
+
+			if (txtLoc.x  < 12) {
+				txtLoc.x = 12;
+				for (let tspan of txt.children) tspan.setAttribute('x', txtLoc.x + txtLoc.width/2);
+			} else if (xDiff < 0) {
+				txtLoc.x = txtLoc.x + xDiff;
+				for (let tspan of txt.children) tspan.setAttribute('x', txtLoc.x + txtLoc.width/2);
+			}
 
 			const txtBoxDiff = lineLoc.y - (txtLoc.y + txtLoc.height);
-			if ((txtBoxDiff < 10 && this.opts.textPos === "up") ||
-				(txtBoxDiff > -10 && this.opts.textPos !== "up"))
-				txt.setAttribute("y", lineLoc.y - txtBoxDiff);
+			if ((txtBoxDiff < textGap && this.opts.textPos === "up") ||
+				(txtBoxDiff > -textGap && this.opts.textPos !== "up")) {
+				txt.setAttribute("y", lineLoc.y - txtLoc.height - textGap);
+				txtLoc = txt.getBBox();
+			}
 
-				box = this.makeTextBox(txtLoc);
+			const box = this.makeTextBox(txtLoc);
 			
 			// Get bounds of box and circle and make connecting lines
 			this.drawElement(box);
@@ -160,6 +188,10 @@ class TimePoint {
 				Y2 = boxLoc.y + boxLoc.height/2,
 				connectLine = this.makeLine(X1, X2, Y1, Y2, this.opts.fill, 6),
 				connectBackground = this.makeLine(X1, X2, Y1, Y2, this.opts.stroke, 14);
+
+			// hide box and text
+			box.style.display = "none";
+			txt.style.display = "none";
 
 			// Add elements to group in the order I want them shown
 			// Elements that were already present will not be duplicated, 
