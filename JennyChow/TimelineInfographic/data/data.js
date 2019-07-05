@@ -20,6 +20,36 @@ function combineDuplicates(arr) {
 	}, []);
 }
 
+// Finds events that occur in the same year between two arrays of events
+// takes two arrays of events and returns an array of:
+// 1: the first array, minus those events that also occur in the same year as an event in the second
+// 2: the second array, minus those events that also occur in the same year as an event in the first
+// 3: the events that occur in both  
+function combineDuplicatesTimeLines(arr1, arr2) {
+	const duplicates = [];
+	let Arr1 = arr1.slice(0),
+		Arr2 = arr2.slice(0),
+		toSplice1 = [],
+		toSplice2 = [];
+	Arr1.forEach((e1, i) => {
+		Arr2.forEach((e2, j) => {
+			if (e1.year === e2.year) {
+				console.log(e1,e2,i,j)
+				duplicates.push({year: e1.year,
+								 event: [e1.event, e2.event]});
+				toSplice1.push(i);
+				toSplice2.push(j);
+				//Arr1.splice(i, 1);
+				//Arr2.splice(j, 1);
+			}
+		})
+	});
+	Arr1 = Arr1.filter((v,i) => !toSplice1.includes(i));
+	Arr2 = Arr2.filter((v,i) => !toSplice2.includes(i));
+	return [Arr1, Arr2, duplicates];
+}
+
+
 
 const Sheet1 = combineDuplicates([
 	{year:1981,	event: "Jennifer Marcus is born"},
@@ -35,7 +65,8 @@ const Sheet1Alternate = combineDuplicates([
 	{year:1997,	event: "Adele Hartwick and Marshall Marcus begin paperwork to adopt a baby"},
 	{year:1999,	event: "Adele Hartwick begins working in the trade show indsutry"},
 	{year:2001,	event: "Su Yang Chow marries, becoming Su Yan Zhang"},
-	{year:2019,	event: "Jennifer builds Jenny Chow / Events of the play"}
+	{year:2019,	event: "Jennifer builds Jenny Chow"},
+	{year:2019,	event: "Events of the play occur"}
 ]);
 
 const Sheet3 = combineDuplicates([
@@ -111,6 +142,10 @@ const Sheet4 = combineDuplicates([
 	{year:2015, event: "Gates joins Musk & Hawking in expressing fear of AI"}
 ]);
 
+
+let [S1t, S3t, S13] = combineDuplicatesTimeLines(Sheet1, Sheet3),
+	[S1, S4t, S14] = combineDuplicatesTimeLines(S1t, Sheet4),
+	[S3, S4, S34] = combineDuplicatesTimeLines(S3t, S4t);
 
 
 

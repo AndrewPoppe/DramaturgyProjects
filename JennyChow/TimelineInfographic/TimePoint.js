@@ -41,10 +41,11 @@ class TimePoint {
 		C.setAttribute("cx", this.opts.x);
 		C.setAttribute("cy", this.opts.y);
 		C.setAttribute("r",  this.opts.r);
-		C.setAttribute("fill", this.opts.fill);
+		C.setAttribute("fill", this.double ? `url(#${this.lg.id})` : this.opts.fill);
 		C.setAttribute("stroke", this.opts.stroke);
 		C.setAttribute("stroke-width", this.opts.strokeWidth);
 		C.Point = this;
+		
 
 		// Handle mouseover
 		C.onmouseenter = function() {
@@ -79,13 +80,13 @@ class TimePoint {
 	}
 
 	// make a box element for text
-	makeTextBox(txtLoc) {
+	makeTextBox(txtLoc, index) {
 		const B = document.createElementNS(this.ns, "rect");
 		B.setAttribute("x", txtLoc.x - 10);
 		B.setAttribute("y", txtLoc.y - 10);
 		B.setAttribute("width", txtLoc.width + 20);
 		B.setAttribute("height", txtLoc.height + 20);
-		B.setAttribute("fill", this.opts.fill);
+		B.setAttribute("fill", !this.double ? this.opts.fill : this.opts.fill[index]);
 		B.setAttribute("stroke", this.opts.stroke);
 		B.setAttribute("stroke-width", "6");
 		B.setAttribute("rx", "10");
@@ -99,7 +100,7 @@ class TimePoint {
 	}
 
 	// make a text element
-	makeText() {
+	makeText(textPos, index) {
 		// word wrap
 		const Wrap = (s, w) => s.replace(
 			new RegExp(`(?![^\\n]{1,${w}}$)([^\\n]{1,${w}})\\s`, 'g'), '$1\n'
@@ -110,7 +111,7 @@ class TimePoint {
 
 		const lineY = this.opts.TimeLine.MainLine.getBBox().y;
 
-		T.setAttribute("y", this.opts.textPos === "up" ? lineY - 50 : lineY + 50);
+		T.setAttribute("y", textPos === "up" ? lineY - 50 : lineY + 50);
 		T.setAttribute("text-anchor", this.opts.anchor);
 		T.style.font = "italic 18px sans-serif";
 
@@ -123,7 +124,8 @@ class TimePoint {
 		yearText.style.font = "bold 24px Helvetica";
 		T.appendChild(yearText);
 		
-		const lines = Wrap(this.opts.content, this.opts.wrap).split('\n');
+		const content = this.opts.content[index];
+		const lines = Wrap(content, this.opts.wrap).split('\n');
 		
 		let lastNewline = false;
 		lines.forEach((line, i) => {
@@ -158,24 +160,73 @@ class TimePoint {
 		return L;
 	}
 
-	// Build the thing
+
+	/////////////////////////////////////////////////////
+	// THESE ALLOW MULTIPLE TEXT BOXES IN SINGLE POINT //
+	/////////////////////////////////////////////////////
+
+	// Create a linear gradient with the given colors, first color on top
+	makeLinearGradient(colors) {
+		const G = document.createElementNS(this.ns, "linearGradient");
+		G.setAttribute("id", Math.random().toString(36).substring(2));
+		G.setAttribute("x1", 1);
+		G.setAttribute("x2", 1);
+		G.setAttribute("y1", 0);
+		G.setAttribute("y2", 1);
+		G.appendChild(this.makeLinearGradientStop("0%", colors[0]));
+		G.appendChild(this.makeLinearGradientStop("50%", colors[0]));
+		G.appendChild(this.makeLinearGradientStop("50%", colors[1]));
+		G.appendChild(this.makeLinearGradientStop("100%", colors[1]));
+		return G;
+	}
+	makeLinearGradientStop(offset, color) {
+		const S = document.createElementNS(this.ns, "stop");
+		S.setAttribute("offset", offset);
+		S.setAttribute("stop-opacity", 1);
+		S.setAttribute("stop-color", color);
+		return S;
+	}
+
+
+
+
+	/////////////////////////////
+	////// Build the thing //////
+	/////////////////////////////
 	construct() {
+
+		if (typeof this.opts.content === "object") {
+			this.double = true;
+			this.lg = this.makeLinearGradient(this.opts.fill);
+			this.opts.TimeLine.svg.appendChild(this.lg);
+		} else {
+			this.opts.content = [this.opts.content];
+		}
+
 		const group = this.makeGroup(),
 			circ = this.makeCircle(),
 			textGap = 100;
 
+
+
 		this.drawGroup();
 		this.addElement(circ);
 
-		if (typeof this.opts.content === "string") { 
-			const txt = this.makeText();
+		//if (typeof this.opts.content === "string") {
+		const connectBackgrounds = [],
+			  boxes = [],
+			  connectLines = [],
+			  texts = [];
+		for (let i = 0; i < this.opts.content.length; i++) {
+			let textPos = this.double ? ["up", "down"][i] : this.opts.textPos; 
+			let txt = this.makeText(textPos, i);
 			this.addElement(txt);
 			let txtLoc = txt.getBBox();
-			const lineLoc = this.opts.TimeLine.MainLine.getBBox();
+			let lineLoc = this.opts.TimeLine.MainLine.getBBox();
 
 			// Deal with txt box location. This should really happen within 
 			// the makeText() method...
-			const xDiff = (lineLoc.x + lineLoc.width) - (txtLoc.x + txtLoc.width) - 12;
+			let xDiff = (lineLoc.x + lineLoc.width) - (txtLoc.x + txtLoc.width) - 12;
 
 			if (txtLoc.x  < 12) {
 				txtLoc.x = 12;
@@ -185,44 +236,44 @@ class TimePoint {
 				for (let tspan of txt.children) tspan.setAttribute('x', txtLoc.x + txtLoc.width/2);
 			}
 
-			const txtBoxDiff = lineLoc.y - (txtLoc.y + txtLoc.height);
-			if ((txtBoxDiff < textGap && this.opts.textPos === "up") ||
-				(txtBoxDiff > -textGap && this.opts.textPos !== "up")) {
+			let txtBoxDiff = lineLoc.y - (txtLoc.y + txtLoc.height);
+			if ((txtBoxDiff < textGap && textPos === "up") ||
+				(txtBoxDiff > -textGap && textPos !== "up")) {
 				txt.setAttribute("y", lineLoc.y - txtLoc.height - textGap);
 				txtLoc = txt.getBBox();
 			}
 
-			const box = this.makeTextBox(txtLoc);
+			let box = this.makeTextBox(txtLoc, i);
 			
 			// Get bounds of box and circle and make connecting lines
 			this.addElement(box);
 			this.addElement(circ);
-			const circLoc = circ.getBBox(),
+			let circLoc = circ.getBBox(),
 				boxLoc = box.getBBox(),
 				X1 = circLoc.x + circLoc.width/2,
 				Y1 = circLoc.y + circLoc.height/2,
 				X2 = boxLoc.x + boxLoc.width/2,
 				Y2 = boxLoc.y + boxLoc.height/2,
-				connectLine = this.makeLine(X1, X2, Y1, Y2, this.opts.fill, 6),
+				connectLine = this.makeLine(X1, X2, Y1, Y2, this.double ? this.opts.fill[i] : this.opts.fill, 6),
 				connectBackground = this.makeLine(X1, X2, Y1, Y2, this.opts.stroke, 14);
 
 			// hide box and text
 			box.style.display = "none";
 			txt.style.display = "none";
 
-			// Add elements to group in the order I want them shown
-			// Elements that were already present will not be duplicated, 
-			// but will be re-ordered
-			this.addElement(connectBackground);
-			this.addElement(circ);
-			this.addElement(box);
-			this.addElement(connectLine);
-			this.addElement(txt);
-	
-
-
+			connectBackgrounds.push(connectBackground);
+			boxes.push(box);
+			connectLines.push(connectLine);
+			texts.push(txt);
 		}
-
+		// Add elements to group in the order I want them shown
+		// Elements that were already present will not be duplicated, 
+		// but will be re-ordered
+		connectBackgrounds.forEach(CB => this.addElement(CB));
+		this.addElement(circ);
+		boxes.forEach(B => this.addElement(B));
+		connectLines.forEach(CL => this.addElement(CL));
+		texts.forEach(T => this.addElement(T));
 	}
 
 }
