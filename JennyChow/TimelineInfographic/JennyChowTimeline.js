@@ -10,25 +10,46 @@ let colors = {
 }
 
 // Sheets are defined in data.js
-const Year0 = 1920,
-	Year1 = 2017,
-	range = Year1 - Year0;
+const Year0 = 1918,
+	Year1 = 2022, // 2017
+	Year0a = 1918,
+	Year1a = 2022,
+	range = Year1 - Year0,
+	rangea = Year1a - Year0a;
 
 
 
-// create a TimeLine
-const TL1 = new TimeLine({
+// create a TimeLine for 2019
+const TL2 = new TimeLine({
 	x: "5%",
-	y: "0px",
+	y: "100px",
 	width: "90%",
 	height: "100%",
 	bgColor: "#f9d595",
 	lineColor: "blue",
 	container: document.body,
-	lineY: "60%",
+	lineY: "50%",
+	lineThickness: 3,
+	years: [Year0a, Year1a]
+});
+TL2.fadeOut();
+
+
+// create a TimeLine for 2005
+const TL1 = new TimeLine({
+	x: "5%",
+	y: "100px",
+	width: "90%",
+	height: "100%",
+	bgColor: "#f9d595",
+	lineColor: "blue",
+	container: document.body,
+	lineY: "50%",
 	lineThickness: 3,
 	years: [Year0, Year1]
 });
+//TL1.div.style.display = "block";
+
 
 // // Second TL
 // const TL2 = new TimeLine({
@@ -165,3 +186,86 @@ S34.forEach(Event => {
 		fill: colors["S34"]
 	});
 });
+
+
+////////// MAKE 2019 TIMELINE
+
+S1a.forEach(Event => {
+	const percent = (Event.year - Year0a) / rangea * 100;
+	new TimePoint({
+		TimeLine: TL2, 
+		x: `${percent}%`, 
+		year: Event.year, 
+		content: Event.event,
+		fill: colors["S1"]
+	});
+});
+
+S3a.forEach(Event => {
+	const percent = (Event.year - Year0a) / rangea * 100;
+	new TimePoint({
+		TimeLine: TL2, 
+		x: `${percent}%`, 
+		year: Event.year, 
+		content: Event.event,
+		fill: colors["S3"]
+	});
+});
+
+S4a.forEach(Event => {
+	const percent = (Event.year - Year0a) / rangea * 100;
+	new TimePoint({
+		TimeLine: TL2, 
+		x: `${percent}%`, 
+		year: Event.year, 
+		content: Event.event,
+		fill: colors["S4"]
+	});
+});
+
+S13a.forEach(Event => {
+	const percent = (Event.year - Year0a) / rangea * 100;
+	new TimePoint({
+		TimeLine: TL2, 
+		x: `${percent}%`, 
+		year: Event.year, 
+		content: Event.event,
+		fill: colors["S13"]
+	});
+});
+
+S14a.forEach(Event => {
+	const percent = (Event.year - Year0a) / rangea * 100;
+	new TimePoint({
+		TimeLine: TL2, 
+		x: `${percent}%`, 
+		year: Event.year, 
+		content: Event.event,
+		fill: colors["S14"]
+	});
+});
+
+S34a.forEach(Event => {
+	const percent = (Event.year - Year0a) / rangea * 100;
+	new TimePoint({
+		TimeLine: TL2, 
+		x: `${percent}%`, 
+		year: Event.year, 
+		content: Event.event,
+		fill: colors["S34"]
+	});
+});
+
+
+
+document.getElementById('yearSelector').onclick = function() {
+	if (this.checked) {
+		TL1.fadeOut();
+		TL2.fadeIn();
+	} else {
+		TL2.fadeOut();
+		TL1.fadeIn();
+	}
+}
+
+

@@ -24,6 +24,36 @@ class TimeLine {
 		this.draw();
 	}
 
+	// fade div in and out
+	fadeOut() {
+	    let op = 1;  // initial opacity
+	    let element = this.div;
+	    let timer = setInterval(function () {
+	        if (op <= 0.1){
+	            clearInterval(timer);
+	            element.style.display = 'none';
+	        }
+	        element.style.opacity = op;
+	        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+	        op -= op * 0.1;
+	    }, 10);
+	}
+	fadeIn() {
+	    let op = 0.1;  // initial opacity
+	    let element = this.div;
+	    element.style.display = 'block';
+	    let timer = setInterval(function () {
+	        if (op >= 1){
+	            clearInterval(timer);
+	        }
+	        element.style.opacity = op;
+	        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+	        op += op * 0.1;
+	    }, 10);
+	}
+
+
+
 	// calculate year markers
 	// for a marker every decade
 	calculateYearMarkers() {

@@ -1,40 +1,20 @@
 <!DOCTYPE html>
 <html>
-<!--
-  <meta charset="utf-8" http-equiv="refresh" content="1"> 
--->
 <head>
 	<title>Jenny Chow Timeline</title>
+  <link rel="stylesheet" type="text/css" href="JennyChowTimeline.css">
 </head>
 <body>
-  <div> <!-- Main Div 
-    <div></div>
-    <div style="background-color: blue; height: 45%; width: 90%; top: 50%; left: 5%; position: fixed">
-      <svg height="100%" width="100%" id="line1">
-        <style>
-          text  { font: italic 12px sans-serif; }
-        </style>
-        <line x1="0%" y1="50%" x2="100%" y2="50%" style="stroke:rgb(0,0,0);stroke-width:3" />
-        <circle cx="0%" cy="50%" r="6" style="stroke: black; fill: white;"/>
-        <linearGradient id="lg" x1="0.5" y1="1" x2="0.5" y2="0">
-          <stop offset="0%" stop-opacity="1" stop-color="green"/>
-          <stop offset="33%" stop-opacity="1" stop-color="green"/>
-          <stop offset="33%" stop-opacity="1" stop-color="yellow"/>
-          <stop offset="66%" stop-opacity="1" stop-color="yellow"/>
-          <stop offset="66%" stop-opacity="1" stop-color="red"/>
-          <stop offset="100%" stop-opacity="1" stop-color="red"/>
-        </linearGradient>
-        <linearGradient id="tri" x1="1" y1="1" x2="0" y2="0">
-          <stop offset="0%" stop-opacity="1" stop-color="green"/>
-          <stop offset="33%" stop-opacity="1" stop-color="green"/>
-          <stop offset="33%" stop-opacity="1" stop-color="yellow"/>
-          <stop offset="66%" stop-opacity="1" stop-color="yellow"/>
-          <stop offset="66%" stop-opacity="1" stop-color="red"/>
-          <stop offset="100%" stop-opacity="1" stop-color="red"/>
-        </linearGradient>
-      </svg>
-    </div>
-	</div> -->
+  <div class="fixedContainer" width="100%" z-index=100>
+    <font face="Helvetica" color="#8ebf42" size="7">2005</font>
+    <label class="switch">
+      <input type="checkbox" id="yearSelector">
+      <span class="slider round"></span>
+    </label>
+    <font face="Helvetica" color="#8ebf42" size="7">2019</font>
+  </div>
+  <div id="2005" ></div>
+  <div id="2019" ></div>
 </body>
 <script type="text/javascript" src="data/data.js"></script>
 <script type="text/javascript" src="TimePoint.js"></script>

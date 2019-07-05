@@ -156,6 +156,7 @@ class TimePoint {
 		L.setAttribute("stroke-width", strokeWidth);
 		L.setAttribute("stroke", color);
 		L.style.display = "none";
+		L.style.pointerEvents = "none";
 		this.elements.push(L);
 		return L;
 	}

@@ -148,6 +148,11 @@ let [S1t, S3t, S13] = combineDuplicatesTimeLines(Sheet1, Sheet3),
 	[S3, S4, S34] = combineDuplicatesTimeLines(S3t, S4t);
 
 
+let [S1ta, S3ta, S13a] = combineDuplicatesTimeLines(Sheet1Alternate, Sheet3),
+	[S1a, S4ta, S14a] = combineDuplicatesTimeLines(S1ta, Sheet4),
+	[S3a, S4a, S34a] = combineDuplicatesTimeLines(S3ta, S4ta);
+
+
 
 
 
