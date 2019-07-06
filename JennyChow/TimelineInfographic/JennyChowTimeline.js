@@ -1,7 +1,7 @@
 
 
 let colors = {
-	S1: "#68f9f2",
+	S1: "#68f9f2", 
 	S3: "#fff78c",
 	S4: "#ebaeef",
 	S13: ["#68f9f2", "#fff78c"],
@@ -276,20 +276,21 @@ const legendX = "5%",
 
 const options2005 = {
 	content: [
-		{title: "Events in Jenny Chow", color: colors.S1},
+		{title: "Events in The Intelligent Design of Jenny Chow", color: colors.S1},
 		{title: "Events in Modern Chinese History", color: colors.S3},
 		{title: "Events in Modern Computing History", color: colors.S4}
 	],
 	svg: TL1.svg,
 	x: legendX,
-	yb: legendY
+	yb: legendY,
+	title: ""
 };
 const Legend2005 = new Legend(options2005);
 
 
 const options2019 = {
 	content: [
-		{title: "Events in Jenny Chow", color: colors.S1},
+		{title: "Events in The Intelligent Design of Jenny Chow", color: colors.S1},
 		{title: "Events in Modern Chinese History", color: colors.S3},
 		{title: "Events in Modern Computing History", color: colors.S4}
 	],
