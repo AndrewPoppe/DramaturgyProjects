@@ -12,7 +12,8 @@ class TimeLine {
 			lineY: "50%",
 			lineThickness: 3,
 			years: [1900,2000],
-			drawYear: true
+			drawYear: true,
+			Title: ""
 		};
 		this.opts = {...defaults, ...options};
 		if (this.opts.svg) {
@@ -102,6 +103,25 @@ class TimeLine {
 		this.svg.appendChild(this.MainLine);
 	}
 
+	// Create title text
+	createTitle() {
+		const T = this.createElement("text");
+		T.setAttribute("x", "50%");
+		T.setAttribute("y", "5%");
+		T.setAttribute("text-anchor", "middle");
+		T.style.font = "bold 24px Helvetica";
+		T.style.fill = "#330055";
+		this.opts.Title.forEach(line => {
+			let t = this.createElement("tspan");
+			t.setAttribute("x", "50%");
+			t.setAttribute("dy", "1.2em");
+			t.textContent = line;
+			T.appendChild(t);
+		});
+		this.Title = T;
+		this.svg.appendChild(T);
+	}
+
 	// Draw year markers
 	drawYearMarkers() {
 		const markers = this.calculateYearMarkers();
@@ -140,6 +160,7 @@ class TimeLine {
 		}
 		this.createMainLine();
 		this.drawYearMarkers();
+		this.createTitle();
 		this.opts.container.appendChild(this.div);
 	}
 

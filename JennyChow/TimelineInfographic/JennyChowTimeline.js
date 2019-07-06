@@ -17,7 +17,13 @@ const Year0 = 1918,
 	range = Year1 - Year0,
 	rangea = Year1a - Year0a;
 
-
+// Title information
+const Title = [
+	"The Intelligent Design of Jenny Chow",
+	"by Rolin Jones",
+	"directed by Jonathan Adler",
+	"2019"
+];
 
 // create a TimeLine for 2019
 const TL2 = new TimeLine({
@@ -30,7 +36,8 @@ const TL2 = new TimeLine({
 	container: document.body,
 	lineY: "50%",
 	lineThickness: 3,
-	years: [Year0a, Year1a]
+	years: [Year0a, Year1a],
+	Title: Title
 });
 TL2.fadeOut();
 
@@ -46,7 +53,8 @@ const TL1 = new TimeLine({
 	container: document.body,
 	lineY: "50%",
 	lineThickness: 3,
-	years: [Year0, Year1]
+	years: [Year0, Year1],
+	Title: Title
 });
 //TL1.div.style.display = "block";
 

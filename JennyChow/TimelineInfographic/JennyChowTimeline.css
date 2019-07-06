@@ -71,5 +71,14 @@ input:checked + .slider:before {
     transform: translateX(-50%);
 }
 
-
+.modal {
+  background-color: lightblue;
+  position: fixed;
+  padding: 2em;
+  left: 40%;
+  top: 0%;
+  width: 20%;
+  display: none;
+  z-index: 1000;
+}
 
