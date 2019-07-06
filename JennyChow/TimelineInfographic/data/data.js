@@ -34,13 +34,10 @@ function combineDuplicatesTimeLines(arr1, arr2) {
 	Arr1.forEach((e1, i) => {
 		Arr2.forEach((e2, j) => {
 			if (e1.year === e2.year) {
-				console.log(e1,e2,i,j)
 				duplicates.push({year: e1.year,
 								 event: [e1.event, e2.event]});
 				toSplice1.push(i);
 				toSplice2.push(j);
-				//Arr1.splice(i, 1);
-				//Arr2.splice(j, 1);
 			}
 		})
 	});
@@ -50,7 +47,7 @@ function combineDuplicatesTimeLines(arr1, arr2) {
 }
 
 
-
+// Events in Jenny Chow
 const Sheet1 = combineDuplicates([
 	{year:1981,	event: "Jennifer Marcus is born"},
 	{year:1983,	event: "Adele Hartwick and Marshall Marcus begin paperwork to adopt a baby"},
@@ -69,6 +66,7 @@ const Sheet1Alternate = combineDuplicates([
 	{year:2019,	event: "Events of the play occur"}
 ]);
 
+// Events in Modern Chinese History
 const Sheet3 = combineDuplicates([
 	{year:1949, event: "Founding of the People's Republic of China"},
 	{year:1972, event: "Nixon visits China"},
@@ -87,6 +85,7 @@ const Sheet3 = combineDuplicates([
 	{year:2015, event: "Communist party announces the end of the \"one-child\" policy"}
 ]);
 
+// Events in Modern Computing History
 const Sheet4 = combineDuplicates([
 	{year:1922, event: "American Appliance Company formed; later becomes Raytheon"},
 	{year:1942, event: "Raytheon produces technology for WWII"},

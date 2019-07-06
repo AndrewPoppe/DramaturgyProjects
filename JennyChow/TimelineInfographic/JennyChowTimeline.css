@@ -67,7 +67,7 @@ input:checked + .slider:before {
     position: fixed;
     padding: 2em;
     left: 50%;
-    top: 0%;
+    top: 90%;
     transform: translateX(-50%);
 }
 

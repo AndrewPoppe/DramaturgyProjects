@@ -13,7 +13,7 @@ class TimePoint {
 			content: "placeholder text",
 			textPos: "up",
 			anchor: "middle",
-			wrap: 40,
+			wrap: 60,
 			year: 1900
 		};
 		this.opts = {...defaults, ...options};

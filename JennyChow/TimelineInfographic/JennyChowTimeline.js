@@ -22,9 +22,9 @@ const Year0 = 1918,
 // create a TimeLine for 2019
 const TL2 = new TimeLine({
 	x: "5%",
-	y: "100px",
+	y: "0px",
 	width: "90%",
-	height: "100%",
+	height: "90%",
 	bgColor: "#f9d595",
 	lineColor: "blue",
 	container: document.body,
@@ -38,9 +38,9 @@ TL2.fadeOut();
 // create a TimeLine for 2005
 const TL1 = new TimeLine({
 	x: "5%",
-	y: "100px",
+	y: "0px",
 	width: "90%",
-	height: "100%",
+	height: "90%",
 	bgColor: "#f9d595",
 	lineColor: "blue",
 	container: document.body,
@@ -268,4 +268,34 @@ document.getElementById('yearSelector').onclick = function() {
 	}
 }
 
+
+// MAKE A LEGEND
+
+const legendX = "5%",
+	  legendY = "95%";
+
+const options2005 = {
+	content: [
+		{title: "Events in Jenny Chow", color: colors.S1},
+		{title: "Events in Modern Chinese History", color: colors.S3},
+		{title: "Events in Modern Computing History", color: colors.S4}
+	],
+	svg: TL1.svg,
+	x: legendX,
+	yb: legendY
+};
+const Legend2005 = new Legend(options2005);
+
+
+const options2019 = {
+	content: [
+		{title: "Events in Jenny Chow", color: colors.S1},
+		{title: "Events in Modern Chinese History", color: colors.S3},
+		{title: "Events in Modern Computing History", color: colors.S4}
+	],
+	svg: TL2.svg,
+	x: legendX,
+	yb: legendY
+};
+const Legend2019 = new Legend(options2019);
 
