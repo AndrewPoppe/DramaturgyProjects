@@ -49,12 +49,12 @@ function combineDuplicatesTimeLines(arr1, arr2) {
 
 // Events in Jenny Chow
 const Sheet1 = combineDuplicates([
-	{year:1981,	event: "Jennifer Marcus is born"},
-	{year:1983,	event: "Adele Hartwick and Marshall Marcus begin paperwork to adopt a baby"},
-	{year:1985,	event: "Adele Hartwick begins working in the trade show indsutry"},
-	{year:1987,	event: "Su Yang Chow marries, becoming Su Yan Zhang"},
-	{year:2005,	event: "Jennifer builds Jenny Chow"},
-	{year:2005,	event: "Events of the play occur"}
+	{year:1979,	event: "Jennifer Marcus is born"},
+	{year:1981,	event: "Adele Hartwick and Marshall Marcus begin paperwork to adopt a baby"},
+	{year:1983,	event: "Adele Hartwick begins working in the trade show indsutry"},
+	{year:1985,	event: "Su Yang Chow marries, becoming Su Yan Zhang"},
+	{year:2003,	event: "Jennifer builds Jenny Chow"},
+	{year:2003,	event: "Events of the play occur"}
 ]);
 
 const Sheet1Alternate = combineDuplicates([

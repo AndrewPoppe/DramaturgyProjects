@@ -4,19 +4,46 @@
 	<title>Jenny Chow Timeline</title>
   <link rel="stylesheet" type="text/css" href="JennyChowTimeline.css">
   <script type="text/javascript" src="lib/jscolor.js"></script>
-</head>
+  <script type="text/javascript" src="lib/js.cookie.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+  <script
+    src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+    integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+    crossorigin="anonymous">
+  </script>
+  </head>
 <body>
   
   <!-- Container for settings -->
-  <div class="modal" style="font-family: Helvetica">
-    <p style="font-family: Helvetica; font-size: 16; font-weight: bold">Point Colors</p>
-    First Color:<input class="jscolor" value="#ff00ff"><br>
-    Second Color:<input class="jscolor" value="#ff00ff"><br>
+  <div id="settingsModal" class="modal" style="font-family: Helvetica">
+    <p style="font-size: 16; font-weight: bold">Point Colors</p>
+    First Color: <input id="firstColor" class="jscolor" value="#ff00ff"><br>
+    Second Color: <input id="secondColor" class="jscolor {onFineChange:'update(this)'}" value="#ff00ff"><br>
+    Third Color: <input id="thirdColor" class="jscolor" value="#ff00ff"><br>
+
+    <p style="font-size: 16; font-weight: bold">Timeline Settings</p>
+    Timeline Color: <input id="timelineColor" class="jscolor" value="#ff00ff"><br>
+    Background Color: <input id="bgColor" class="jscolor" value="#ff00ff"><br>
+
+    <p style="font-size: 16; font-weight: bold">Other Settings</p>
+    Title Text Color: <input id="titleColor" class="jscolor" value="#ff00ff"><br>
+    Legend Background Color: <input id="legendBgColor" class="jscolor" value="#ff00ff"><br>
+    Year Switcher Background Color: <input id="switcherBgColor" class="jscolor" value="#ff00ff"><br>
+    Year Switcher Text Color: <input id="switcherTxtColor" class="jscolor" value="#ff00ff"><br>
+
+    <br><br>
+    <button>Save</button>
+    <button>Restore Defaults</button>
   </div>
+  <script type="text/javascript">$('#settingsModal').draggable();</script>
+
+  <!-- Link to open the modal -->
+  <p><a href="#settingsModal" rel="modal:open" style="display: none">Settings</a></p>
 
 
   <div class="fixedContainer" width="100%" z-index=100>
-    <font face="Helvetica" color="#8ebf42" size="7">2005</font>
+    <font face="Helvetica" color="#8ebf42" size="7">2003</font>
     <label class="switch">
       <input type="checkbox" id="yearSelector">
       <span class="slider round"></span>

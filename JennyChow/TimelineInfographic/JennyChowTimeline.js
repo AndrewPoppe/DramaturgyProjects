@@ -1,10 +1,28 @@
 
 
+// Set default colors object
+const defaultColors = {
+
+};
+
+// Read cookies, and make new object
+//const colors = {...defaultColors, ...Cookies.get("colors")};
+
+// Set values in settings modal
+// Since I included JQuery, I may as well use it...
+//Object.entries(colors).forEach(entry => {
+
+//});
+
+
+
+
+
 let colors = {
-	S1: "#68f9f2", 
-	S3: "#fff78c",
-	S4: "#ebaeef",
-	S13: ["#68f9f2", "#fff78c"],
+	S1: "#68f9f2", // Sheet 1
+	S3: "#fff78c", // Sheet 3
+	S4: "#ebaeef", // Sheet 4
+	S13: ["#68f9f2", "#fff78c"], // Sheets 
 	S14: ["#68f9f2", "#ebaeef"],
 	S34: ["#fff78c", "#ebaeef"]
 }
@@ -42,7 +60,7 @@ const TL2 = new TimeLine({
 TL2.fadeOut();
 
 
-// create a TimeLine for 2005
+// create a TimeLine for 2003
 const TL1 = new TimeLine({
 	x: "5%",
 	y: "0px",
@@ -56,78 +74,13 @@ const TL1 = new TimeLine({
 	years: [Year0, Year1],
 	Title: Title
 });
-//TL1.div.style.display = "block";
-
-
-// // Second TL
-// const TL2 = new TimeLine({
-// 	x: "5%",
-// 	y: "0px",
-// 	width: "90%",
-// 	height: "100%",
-// 	bgColor: "white",
-// 	lineColor: "black",
-// 	container: document.body,
-// 	lineY: "80%",
-// 	lineThickness: 3,
-// 	years: [Year0, Year1],
-// 	drawYear: false,
-// 	svg: TL1.svg
-// });
-
-// // Third TL
-// const TL3 = new TimeLine({
-// 	x: "5%",
-// 	y: "0px",
-// 	width: "90%",
-// 	height: "100%",
-// 	bgColor: "white",
-// 	lineColor: "purple",
-// 	container: document.body,
-// 	lineY: "70%",
-// 	lineThickness: 8,
-// 	years: [Year0, Year1],
-// 	drawYear: false,
-// 	svg: TL1.svg
-// });
 
 
 
 
-// Sheet4.forEach(Event => {
-// 	const percent = (Event.year - Year0) / range * 100;
-// 	new TimePoint({
-// 		TimeLine: TL3, 
-// 		x: `${percent}%`, 
-// 		year: Event.year, 
-// 		content: [Event.event,"This should be on the bottom and red"],
-// 		fill: ["#68f9f2", "red"],
-// 		textPos: "down"
-// 	});
-// });
 
-// Sheet3.forEach(Event => {
-// 	const percent = (Event.year - Year0) / range * 100;
-// 	new TimePoint({
-// 		TimeLine: TL2, 
-// 		x: `${percent}%`, 
-// 		year: Event.year, 
-// 		content: Event.event,
-// 		fill: "#fff78c"
-// 	});
-// });
-
-// Sheet1.forEach(Event => {
-// 	const percent = (Event.year - Year0) / range * 100;
-// 	new TimePoint({
-// 		TimeLine: TL1, 
-// 		x: `${percent}%`, 
-// 		year: Event.year, 
-// 		content: Event.event,
-// 		fill: "#ebaeef"
-// 	});
-// });
-
+//// ADD POINTS
+///////////////
 
 S1.forEach(Event => {
 	const percent = (Event.year - Year0) / range * 100;
@@ -136,7 +89,8 @@ S1.forEach(Event => {
 		x: `${percent}%`, 
 		year: Event.year, 
 		content: Event.event,
-		fill: colors["S1"]
+		fill: colors["S1"],
+		class: "firstPoint"
 	});
 });
 
@@ -147,7 +101,8 @@ S3.forEach(Event => {
 		x: `${percent}%`, 
 		year: Event.year, 
 		content: Event.event,
-		fill: colors["S3"]
+		fill: colors["S3"],
+		class: "secondPoint"
 	});
 });
 
@@ -158,7 +113,8 @@ S4.forEach(Event => {
 		x: `${percent}%`, 
 		year: Event.year, 
 		content: Event.event,
-		fill: colors["S4"]
+		fill: colors["S4"],
+		class: "thirdPoint"
 	});
 });
 
@@ -282,7 +238,7 @@ document.getElementById('yearSelector').onclick = function() {
 const legendX = "5%",
 	  legendY = "95%";
 
-const options2005 = {
+const options2003 = {
 	content: [
 		{title: "Events in The Intelligent Design of Jenny Chow", color: colors.S1},
 		{title: "Events in Modern Chinese History", color: colors.S3},
@@ -293,7 +249,7 @@ const options2005 = {
 	yb: legendY,
 	title: ""
 };
-const Legend2005 = new Legend(options2005);
+const Legend2003 = new Legend(options2003);
 
 
 const options2019 = {
@@ -307,4 +263,20 @@ const options2019 = {
 	yb: legendY
 };
 const Legend2019 = new Legend(options2019);
+
+
+
+
+
+
+
+
+function update(jscolor) {
+    // 'jscolor' instance can be used as a string
+    $('.secondPoint').each((i,e) => {e.setAttribute("fill", '#' + jscolor)});
+}
+
+
+
+
 

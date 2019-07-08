@@ -44,6 +44,8 @@ class TimePoint {
 		C.setAttribute("fill", this.double ? `url(#${this.lg.id})` : this.opts.fill);
 		C.setAttribute("stroke", this.opts.stroke);
 		C.setAttribute("stroke-width", this.opts.strokeWidth);
+		console.log(this.opts.class);
+		C.classList.add(this.opts.class);
 		C.Point = this;
 		
 
@@ -90,6 +92,7 @@ class TimePoint {
 		B.setAttribute("stroke", this.opts.stroke);
 		B.setAttribute("stroke-width", "6");
 		B.setAttribute("rx", "10");
+		B.classList.add(this.opts.class);
 		this.elements.push(B);
 		return B;
 	}
@@ -185,6 +188,7 @@ class TimePoint {
 		S.setAttribute("offset", offset);
 		S.setAttribute("stop-opacity", 1);
 		S.setAttribute("stop-color", color);
+		S.classList.add(this.opts.class);
 		return S;
 	}
 
